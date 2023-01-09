@@ -1,0 +1,9 @@
+Flask
+SQLAlchemy
+Werkzeug
+flask-sqlalchemy
+marshmallow-sqlalchemy
+markupsafe
+flask_marshmallow
+flask-rest-paginate
+flask-cors
