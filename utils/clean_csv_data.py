@@ -2,10 +2,12 @@
 """Cleans and transforms the data coming from the csv file."""
 import csv
 
+
 def string_to_list(text, delimeter=","):
     """Transforms strings into a list, given a delimeter."""
     new_text = text.split(delimeter)
     return new_text
+
 
 def cleansed_csv_data(file_path="data/netflix_titles.csv", show_output=False):
     """Cleans and transformas the csv file data, and returns the list of new data."""
@@ -16,9 +18,9 @@ def cleansed_csv_data(file_path="data/netflix_titles.csv", show_output=False):
         for row in csv_reader:
             director = row.get("director", "")
             if director:
-                row['director'] = string_to_list(director)
+                row["director"] = string_to_list(director)
             else:
-                row['director'] = []
+                row["director"] = []
 
             cast = row.get("cast", "")
             if cast:
@@ -32,7 +34,7 @@ def cleansed_csv_data(file_path="data/netflix_titles.csv", show_output=False):
             else:
                 row["country"] = []
 
-            listed_in =row.get("listed_in", "")
+            listed_in = row.get("listed_in", "")
             if listed_in:
                 row["listed_in"] = string_to_list(listed_in)
             else:
@@ -44,7 +46,6 @@ def cleansed_csv_data(file_path="data/netflix_titles.csv", show_output=False):
             movies_list.append(row)
 
     return movies_list
-
 
 
 if __name__ == "__main__":

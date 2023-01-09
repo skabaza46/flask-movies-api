@@ -1,6 +1,7 @@
 from api import db, Cast, Director, Country, Listing, Movie, app
 from utils.clean_csv_data import cleansed_csv_data
 
+
 def data_constructor(datas, model_type):
     model_type = model_type.lower()
 
@@ -31,11 +32,17 @@ if __name__ == "__main__":
 
             casts = data_constructor(datas=movie.get("cast", []), model_type="Cast")
 
-            directors = data_constructor(datas=movie.get("director", []), model_type="Director")
+            directors = data_constructor(
+                datas=movie.get("director", []), model_type="Director"
+            )
 
-            listings = data_constructor(datas=movie.get("listed_in", []), model_type="Listing")
+            listings = data_constructor(
+                datas=movie.get("listed_in", []), model_type="Listing"
+            )
 
-            countrys = data_constructor(datas=movie.get("country", []), model_type="Country")
+            countrys = data_constructor(
+                datas=movie.get("country", []), model_type="Country"
+            )
 
             created_movie = Movie(
                 title=movie.get("title", ""),
@@ -49,7 +56,7 @@ if __name__ == "__main__":
                 directors=directors,
                 listings=listings,
                 countrys=countrys,
-               )
+            )
 
             print("\nCasts: {}".format(casts))
             print("\nDirectors: {}".format(directors))
@@ -58,14 +65,7 @@ if __name__ == "__main__":
 
             print(countrys)
 
-
-            db.session.add_all([*casts,*directors, *listings, *countrys])
+            db.session.add_all([*casts, *directors, *listings, *countrys])
             db.session.add_all([created_movie])
 
             db.session.commit()
-
-
-
-
-
-
