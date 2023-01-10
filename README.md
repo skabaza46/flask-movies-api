@@ -4,9 +4,9 @@ A Flask API Serving movie data
 ## Setup Instructions
 ### Create a .env file in the root directory, with the below variables
 ```
-SQLALCHEMY_DATABASE_URI="sqlite:///movies.db"
-SQLALCHEMY_TRACK_MODIFICATIONS=False
-SECRET_KEY="60e04612-edfa-4ad0-b9f4-8cab1616397d"
+SQLALCHEMY_DATABASE_URI=""
+SQLALCHEMY_TRACK_MODIFICATIONS=True|False
+SECRET_KEY=""
 ```
 
 ### Install Pipenv
