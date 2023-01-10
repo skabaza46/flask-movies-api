@@ -1,11 +1,5 @@
-FROM python:3.7
-
-WORKDIR /opt/app
-
+FROM python:3.8
+WORKDIR app
 COPY . .
-
-RUN pip install --no-cache-dir -r requirements-prod.txt
-
-EXPOSE 5000
-
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+RUN pip install -r requirements.txt
+ENV PORT=80
