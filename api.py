@@ -203,8 +203,9 @@ def user_register():
         print("\nauth_token: {}".format(token))
 
         responseObject = {
-            "status": "success",
-            "message": "Successfully registered.",
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
             "token": token,
         }
 
@@ -240,14 +241,13 @@ def login():
     if user and bcrypt.check_password_hash(user.password, json_data["password"]):
 
         session["logged_in"] = True
-        auth_token = user.encode_token(user)
-
-        print("auth_token: {}".format(auth_token))
-        if auth_token:
+        token = user.encode_token(user)
+        if token:
             responseObject = {
-                "status": "success",
-                "message": "Successfully loggedin.",
-                "token": auth_token,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "token": token,
             }
 
         return jsonify(data=responseObject), 200
