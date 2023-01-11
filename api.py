@@ -197,16 +197,12 @@ def user_register():
     try:
         db.session.add(user)
         db.session.commit()
-        # Generate token
-        token = user.encode_token(user)
-
-        print("\nauth_token: {}".format(token))
+        # token = user.encode_token(user)
 
         responseObject = {
             "first_name": user.first_name,
             "last_name": user.last_name,
             "email": user.email,
-            "token": token,
         }
 
         return jsonify(data=responseObject), 201
