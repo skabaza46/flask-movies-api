@@ -1,16 +1,25 @@
 import argparse
+import datetime
 from flask import Flask, jsonify
 from sqlalchemy import or_
+from sqlalchemy.orm import load_only
+from sqlalchemy import func
+
 from flask_rest_paginate import Pagination
 from flask_cors import CORS, cross_origin
 
 from models.movie import Movie
+from models.cast import Cast
+from models.director import Director
+from models.country import Country
+from models.listing import Listing
+
 from schemas.movie import movie_schema, movies_schema
 from marsh.ma import ma
 from alchemy_db.db import db
 from settings import settings
 from migrations import initialize_db as initialize_db
-
+from utils.clean_movie_field_strings import clean as clean_field
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = settings.SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = settings.SQLALCHEMY_TRACK_MODIFICATIONS
@@ -66,6 +75,63 @@ def search(searchVar=None):
 
         response = pagination.paginate(query, movies_schema, True)
         return response
+@app.route("/statistics/<int:release_year>", methods=["GET"])
+@app.route("/statistics", methods=["GET"])
+def statistics(release_year=None):
+    """Create statistics data for the dashboard."""
+    if not release_year:
+        latest_movie = Movie.query.order_by(Movie.release_year.desc()).first()
+        if latest_movie.release_year:
+            release_year = latest_movie.release_year
+        else:
+            release_year = datetime.date.today().year
+
+    movies = Movie.query.filter(Movie.release_year==release_year)
+
+    # Create the structure of the payload
+    data_points = {
+            "movies_year": release_year,
+            "total_movies":  movies.count(),
+            "total_directors": 0,
+            "ratings": {},
+            "types": {},
+            "listings": {},
+    }
+
+    for movie in movies:
+        rating = (movie.rating.lower()).replace("-", "_")
+        movie_type = (movie.type.lower()).replace(" ", "_")
+        listings =  [ {clean_field(i.name): 0, "name": i.name,"key": clean_field(i.name)} for i in movie.listings]
+
+        if rating not in data_points["ratings"].keys():
+            data_points['ratings'].update({rating: {"total": 1,"name": movie.rating}})
+        else:
+            data_points['ratings'][rating]["total"] += 1
+
+        if movie_type not in data_points['types'].keys():
+            data_points['types'].update({movie_type: {"total":1, "name": movie.rating}})
+        else:
+            data_points['types'][movie_type]["total"] += 1
+
+        for item in listings:
+            listing_name = item.get("name")
+            listing_key = item.get("key")
+
+            if listing_key not in data_points['listings'].keys():
+                data_points['listings'].update({listing_key: {"total": 1, 'name': listing_name}})
+            else:
+               data_points['listings'][listing_key]["total"] += 1
+
+    new_listings = [ data_points["listings"][i] for i in data_points["listings"]]
+    data_points['listings'] = new_listings
+
+    types = [ data_points["types"][i] for i in data_points["types"].keys()]
+    data_points["types"] = types
+
+    ratings = [ data_points["ratings"][i] for i in data_points["ratings"].keys()]
+    data_points["ratings"] = ratings
+
+    return jsonify(data=data_points)
 
 
 if __name__ == "__main__":
@@ -97,4 +163,4 @@ if __name__ == "__main__":
     if args.run != None:
         db.init_app(app)
         ma.init_app(app)
-        app.run(debug=True)
+        app.run(debug=False,threaded=True)
