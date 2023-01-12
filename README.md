@@ -25,12 +25,12 @@ pipenv install -r requirements.txt
 ### Migrate data into the database
 #### Run below command while in project working directory
 ```
-python app.py --migrate
+python api.py --migrate
 ```
 ### Start the API
 #### Runt below command, starts at port=5000 by default
 ```
-python app.py --run
+python api.py --run
 ```
 
 ## Endpoints
