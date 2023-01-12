@@ -1,5 +1,6 @@
 import argparse
 import uuid
+import os
 import datetime
 from flask import Flask, jsonify, request, session
 from flask_bcrypt import Bcrypt
@@ -301,6 +302,6 @@ if __name__ == "__main__":
     if args.run != None:
         db.init_app(app)
         ma.init_app(app)
-        app.run(debug=True, threaded=True, host="0.0.0.0")
+        app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
         # app.run(debug=True, threaded=True)
 
