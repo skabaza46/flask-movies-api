@@ -4,7 +4,7 @@ from models.country import Country
 from models.listing import Listing
 from models.movie import Movie
 from utils.clean_csv_data import cleansed_csv_data
-from api import app
+from app import app
 from alchemy_db.db import db
 
 
