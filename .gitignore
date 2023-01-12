@@ -2,3 +2,8 @@
 *.lock
 .env
 .DS_Store
+marsh/__pycache__
+migrations/__pycache__
+schemas/__pycache__
+settings/__pycache__
+utils/__pycache__
