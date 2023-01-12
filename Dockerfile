@@ -9,4 +9,4 @@ COPY . .
 
 # CMD python api.py --run
 
-CMD ["python", "app.py", "--run", "--host=0.0.0.0"]
+CMD ["python", "app.py", "--run"]
