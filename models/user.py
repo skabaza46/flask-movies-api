@@ -50,10 +50,19 @@ class User(db.Model):
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms="HS256")
 
-            return payload["sub"]
+            return {
+                "user": payload["sub"],
+                "message": "Signature expired. Please log in again.",
+            }
 
         except jwt.ExpiredSignatureError:
 
-            return "Signature expired. Please log in again."
+            return {"user": None, "message": "Signature expired. Please log in again."}
+        except jwt.InvalidSignatureError:
+            return {"user": None, "message": "Signature verification failed."}
         except Exception as error:
-            raise error
+
+            return {
+                "user": None,
+                "message": "Something went wrong while trying to validate token.",
+            }

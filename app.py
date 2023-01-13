@@ -253,11 +253,36 @@ def login():
         return jsonify(data=status), 401
 
 
-@app.route("/user/logout")
+@app.route("/user/logout", methods=["post"])
 @cross_origin()
 def logout():
     session.pop("logged_in", None)
     return jsonify(dara="Logged out!"), 200
+
+
+@app.route("/user/check-token", methods=["post"])
+@cross_origin()
+def check_token():
+    session.pop("logged_in", None)
+
+    headers = request.headers
+    bearer = headers.get("Authorization")
+
+    if not bearer:
+        return jsonify(data="Anonymous User"), 401
+    else:
+        print("bearer: {}".format(bearer))
+        token = bearer.split()[1]
+
+        user = User().decode_token(token)
+
+        user_profile = user.get("user", None)
+
+        if user_profile:
+            user_profile.pop("id")
+            return jsonify(data=user_profile), 200
+        else:
+            return jsonify(data=user_profile), 401
 
 
 if __name__ == "__main__":
