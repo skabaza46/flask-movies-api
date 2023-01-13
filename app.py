@@ -198,12 +198,13 @@ def user_register():
     try:
         db.session.add(user)
         db.session.commit()
-        # token = user.encode_token(user)
+        token = user.encode_token(user)
 
         responseObject = {
             "first_name": user.first_name,
             "last_name": user.last_name,
             "email": user.email,
+            "token": token,
         }
 
         return jsonify(data=responseObject), 201
@@ -280,6 +281,7 @@ def check_token():
 
         if user_profile:
             user_profile.pop("id")
+            user_profile.update({"token": token})
             return jsonify(data=user_profile), 200
         else:
             return jsonify(data=user_profile), 401
