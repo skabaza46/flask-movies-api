@@ -27,10 +27,30 @@ pipenv install -r requirements.txt
 ```
 python api.py --migrate
 ```
-### Start the API
-#### Runt below command, starts at port=5000 by default
+### Start the API without Docker or Docker Compose
+#### Start the service at port=5000 by default
 ```
 python api.py --run
+```
+
+### Start the API with Docker
+#### Build the image first
+```
+docker build -t flask-movie-api .
+```
+#### Start the service
+```
+docker run -it  -p 5000:5000 flask-movie-api
+```
+
+### Start the API with Docker
+#### Option 1: v1 branch of the docker/compose repo
+```
+docker-compose up
+```
+#### Option 2: v2 branch of the docker/compose repo
+```
+docker compose up
 ```
 
 ## Endpoints
