@@ -66,13 +66,13 @@ steps:
 
 # This step will deploy the new container image to cloud run
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: [
-    'run',
-    'deploy',
-    'flask-movies-api',
-    '--image=gcr.io/movies-dashboard-375900/flask-movies-api',
-     '--region=us-east1',
-     '--allow-unauthenticated',
-     '--set-env-vars SQLALCHEMY_DATABASE_URI=${_SQLALCHEMY_DATABASE_URI}',
-     '--set-env-vars SECRET_KEY=${_SECRET_KEY}',
-     '--set-env-vars SQLALCHEMY_TRACK_MODIFICATIONS=${_SQLALCHEMY_TRACK_MODIFICATIONS}']
+  args:
+    - 'run'
+    - 'deploy'
+    - 'flask-movies-api'
+    - '--image=gcr.io/movies-dashboard-375900/flask-movies-api'
+    - '--region=us-east1'
+    - '--allow-unauthenticated'
+    - '--set-env-vars=SQLALCHEMY_DATABASE_URI=${_SQLALCHEMY_DATABASE_URI}'
+    - '--set-env-vars=SECRET_KEY=${_SECRET_KEY}'
+    - '--set-env-vars=SQLALCHEMY_TRACK_MODIFICATIONS=${_SQLALCHEMY_TRACK_MODIFICATIONS}'
